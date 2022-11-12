@@ -14,14 +14,14 @@ const router = express.Router();
 router.post("/:fcenterid", verifyAdmin, createCage);
 
 // update
-router.put("/:id", verifyAdmin, updateCage);
+router.put("/:cageid", verifyAdmin, updateCage);
 
 // delete
 router.delete("/:fcenterid/:cageid", verifyAdmin, deleteCage);
 
 // get a foster center
 
-router.get("/:id", getCage);
+router.get("/:cageid", getCage);
 
 // get all foster centers
 

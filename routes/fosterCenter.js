@@ -1,9 +1,12 @@
 import express from "express";
 import {
+  countByCity,
+  countByType,
   createFosterCenter,
   deleteFosterCenter,
   getFosterCenter,
   getFosterCenters,
+  getFosterCenterCages,
   updateFosterCenter,
 } from "../controllers/fosterCenter.js";
 import { verifyAdmin } from "../utils/verifyToken.js";
@@ -14,17 +17,20 @@ const router = express.Router();
 router.post("/", verifyAdmin, createFosterCenter);
 
 // update
-router.put("/:id", verifyAdmin, updateFosterCenter);
+router.put("/update/:id", verifyAdmin, updateFosterCenter);
 
 // delete
-router.delete("/:id", verifyAdmin, deleteFosterCenter);
+router.delete("/delete/:id", verifyAdmin, deleteFosterCenter);
 
 // get a foster center
 
-router.get("/:id", getFosterCenter);
+router.get("/find/:id", getFosterCenter);
 
 // get all foster centers
 
-router.get("/", getFosterCenters);
+router.get("/find", getFosterCenters);
+router.get("/countbycity", countByCity);
+router.get("/countbytype", countByType);
+router.get("/cage/:fcenterid", getFosterCenterCages);
 
 export default router;

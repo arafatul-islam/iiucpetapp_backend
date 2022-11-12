@@ -1,4 +1,5 @@
 import FosterCenter from "../models/FosterCenter.js";
+import Cage from "../models/Cage.js";
 
 // create foster center
 export const createFosterCenter = async (req, res, next) => {
@@ -48,9 +49,55 @@ export const getFosterCenter = async (req, res, next) => {
 };
 
 export const getFosterCenters = async (req, res, next) => {
+  const { min, max, ...otherQueries } = req.query;
   try {
-    const fosterCenters = await FosterCenter.find();
+    const fosterCenters = await FosterCenter.find({
+      ...otherQueries,
+      cheapestPrice: { $gt: min | 1, $lt: max || 100 },
+    }).limit(req.query.limit);
     res.status(200).json(fosterCenters);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const countByCity = async (req, res, next) => {
+  const cities = req.query.cities.split(",");
+  try {
+    const list = await Promise.all(
+      cities.map((city) => {
+        return FosterCenter.countDocuments({ city: city });
+      })
+    );
+    res.status(200).json(list);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const countByType = async (req, res, next) => {
+  const types = req.query.types.split(",");
+  try {
+    const list = await Promise.all(
+      types.map((type) => {
+        return FosterCenter.countDocuments({ type: type });
+      })
+    );
+    res.status(200).json(list);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getFosterCenterCages = async (req, res, next) => {
+  try {
+    const fosterCenter = await FosterCenter.findById(req.params.fcenterid);
+    const list = await Promise.all(
+      fosterCenter?.cages.map((cage) => {
+        return Cage.findById(cage);
+      })
+    );
+    res.status(200).json(list);
   } catch (error) {
     next(error);
   }

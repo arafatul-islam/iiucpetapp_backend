@@ -25,7 +25,7 @@ export const createCage = async (req, res, next) => {
 // update foster center cage
 export const updateCage = async (req, res, next) => {
   const updatedCage = await Cage.findByIdAndUpdate(
-    req.params.id,
+    req.params.cageid,
     {
       $set: req.body,
     },
@@ -57,7 +57,7 @@ export const deleteCage = async (req, res, next) => {
 // get a foster center cage
 export const getCage = async (req, res, next) => {
   try {
-    const cage = await Cage.findById(req.params.id);
+    const cage = await Cage.findById(req.params.cageid);
     res.status(200).json(cage);
   } catch (error) {
     next(createError(401, error));
