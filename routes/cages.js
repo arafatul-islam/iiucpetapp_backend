@@ -5,6 +5,7 @@ import {
   getCage,
   getCages,
   updateCage,
+  updateCageAvailabilty,
 } from "../controllers/cages.js";
 import { verifyAdmin } from "../utils/verifyToken.js";
 
@@ -15,6 +16,7 @@ router.post("/:fcenterid", verifyAdmin, createCage);
 
 // update
 router.put("/:cageid", verifyAdmin, updateCage);
+router.put("/availability/:cageid", updateCageAvailabilty);
 
 // delete
 router.delete("/:fcenterid/:cageid", verifyAdmin, deleteCage);

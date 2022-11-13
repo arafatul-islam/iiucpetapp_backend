@@ -38,6 +38,23 @@ export const updateCage = async (req, res, next) => {
   }
 };
 
+// update foster center cage availability
+export const updateCageAvailabilty = async (req, res, next) => {
+  try {
+    await Cage.updateOne(
+      {
+        "cageNumbers._id": req.params.cageid,
+      },
+      {
+        $push: { "cageNumbers.$.unavailableDates": req.body.dates },
+      }
+    );
+    res.status(200).json("cage availability updated");
+  } catch (error) {
+    next(createError(401, error));
+  }
+};
+
 // delete foster center cage
 export const deleteCage = async (req, res, next) => {
   const cageid = req.params.cageid;
