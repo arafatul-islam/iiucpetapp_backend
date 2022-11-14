@@ -8,13 +8,27 @@ export const register = async (req, res, next) => {
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(req.body.password, salt);
     const newUser = await new User({
-      username: req.body.username,
+      // username: req.body.username,
       email: req.body.email,
       password: hashedPassword,
     });
 
-    await newUser.save();
-    res.status(200).json(newUser);
+    await newUser
+      .save()
+      .then((result) => {
+        const { password, isAdmin, ...otherDetails } = result;
+
+        res.status(200).send({
+          message: "user created successfully",
+          otherDetails,
+        });
+      })
+      .catch((err) => {
+        res.status(500).send({
+          message: "error creating user",
+          err,
+        });
+      });
   } catch (error) {
     return next(error);
   }
@@ -49,7 +63,7 @@ export const login = async (req, res, next) => {
     res
       .cookie("access_token", token, { httpOnly: true })
       .status(200)
-      .json(otherDetails);
+      .json({ details: { ...otherDetails }, isAdmin });
   } catch (error) {
     return next(error);
   }
