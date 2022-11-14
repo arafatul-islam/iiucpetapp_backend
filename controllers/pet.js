@@ -18,7 +18,7 @@ export const createPet = async (req, res) => {
       additionalImagesPaths = additionalImages.map((file) => file.path);
     }
 
-    const createdPet = Pet.create({
+    const createdPet = await Pet.create({
       name,
       age,
       breed,
@@ -36,6 +36,45 @@ export const createPet = async (req, res) => {
   }
 };
 
+export const updatePet = async (req, res) => {
+  try {
+    const { petid } = req.params;
+    const { name, age, breed, color, description, imageLabel, category } =
+      req.body;
+    const { images, additionalImages } = req.files;
+
+    let imagepath = "";
+    let additionalImagesPaths = [];
+
+    if (images && images.length > 0) {
+      imagepath = images[0].path;
+    }
+
+    if (additionalImages && additionalImages.length > 0) {
+      additionalImagesPaths = additionalImages.map((file) => file.path);
+    }
+
+    const updatedPet = await Pet.findByIdAndUpdate(
+      petid,
+      {
+        name,
+        age,
+        breed,
+        color,
+        description,
+        imageLabel,
+        category,
+        image: imagepath,
+        additionalImages: additionalImagesPaths,
+      },
+      { new: true }
+    );
+
+    res.json({ mesage: "pet updated", updatedPet });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
 export const getAllPets = async (req, res) => {
   try {
     const pets = await Pet.find();

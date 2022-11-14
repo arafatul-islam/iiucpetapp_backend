@@ -2,7 +2,12 @@ import express from "express";
 import multer from "multer";
 import fs, { mkdirSync } from "fs";
 import path from "path";
-import { createPet, getAllPets, getOnePet } from "../controllers/pet.js";
+import {
+  createPet,
+  getAllPets,
+  getOnePet,
+  updatePet,
+} from "../controllers/pet.js";
 
 const router = express.Router();
 
@@ -48,6 +53,17 @@ router.post(
   createPet
 );
 // update pet
+router.put(
+  "/updatepet/:petid",
+  upload.fields([
+    {
+      name: "images",
+      maxCount: 1,
+    },
+    { name: "additionalImages", maxCount: 5 },
+  ]),
+  updatePet
+);
 // delete pet
 // get a pet
 router.get("/allpets/:petid", getOnePet);
