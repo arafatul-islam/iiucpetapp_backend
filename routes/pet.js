@@ -4,6 +4,7 @@ import fs, { mkdirSync } from "fs";
 import path from "path";
 import {
   createPet,
+  deletePet,
   getAllPets,
   getOnePet,
   updatePet,
@@ -65,6 +66,8 @@ router.put(
   updatePet
 );
 // delete pet
+router.delete("/deletepet/:petid", deletePet);
+
 // get a pet
 router.get("/allpets/:petid", getOnePet);
 // get all pets

@@ -3,8 +3,9 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import path from "path";
-import * as url from "url";
 import morgan from "morgan";
+
+import * as url from "url";
 
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
@@ -17,6 +18,7 @@ import CagesRoute from "./routes/cages.js";
 import UsersRoute from "./routes/users.js";
 import PetCategoryRoute from "./routes/petCategory.js";
 import PetRoute from "./routes/pet.js";
+import AdoptionRoute from "./routes/adoption.js";
 
 const app = express();
 dotenv.config();
@@ -37,6 +39,7 @@ app.use("/users", UsersRoute);
 // adoption api
 app.use("/petcategory", PetCategoryRoute);
 app.use("/pet", PetRoute);
+app.use("/adoption", AdoptionRoute);
 
 // error handling middleware
 app.use((err, req, res, next) => {
